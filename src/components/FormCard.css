@@ -1,4 +1,4 @@
-.container {
+.containerW {
     width: 30%;
     z-index: 1;
     cursor: pointer;
@@ -6,7 +6,7 @@
     margin-left: 68%;
     margin-top: 6%;
 }
-.loginContainer {
+.loginContainerW {
     width: 100%;
 }
 input {

@@ -19,8 +19,8 @@ const FormCard = ({history, display}) => {
     }, [history])
 
     return (
-        <div class="container">
-            <form onSubmit={handleAdd} class="loginContainer">
+        <div class="containerW">
+            <form onSubmit={handleAdd} class="loginContainerW">
                 <input
                     type="email"
                     name="email"

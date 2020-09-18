@@ -16,7 +16,7 @@ const SignOut = () => {
         return <button class="sair" onClick={out}>Sair</button>
     }
     else {
-        return <Redirect to={"/signIn"} />
+        return null
     }
 }
 
