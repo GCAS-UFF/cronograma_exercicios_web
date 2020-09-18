@@ -1,0 +1,33 @@
+.container {
+    width: 30%;
+    z-index: 1;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 68%;
+    margin-top: 6%;
+}
+.loginContainer {
+    width: 100%;
+}
+input {
+    align-items: center;
+    color: #777;
+    font-size: 15px;
+    width: 80%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0px 0px 20px;
+    height: 40px;
+    padding-left: 10px;
+}
+
+button {
+    color: #fff;
+    font-size: 16px;
+    background: #169BD5;
+    border: 0;
+    border-radius: 5px;
+    width: 60%;
+    margin: 0 0 20px 10px;
+    height: 40px;
+}

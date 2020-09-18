@@ -1,0 +1,92 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3%;
+    padding: 0 1% 0;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 75%;
+    box-shadow: 2px 2px 2px #169BD5;
+}
+
+.title {
+    color: #169BD5;
+    font-weight: 500;
+    font-size: 130%;
+}
+
+.buttonAdd {
+    padding-top: 10px;
+}
+
+.titleArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.titleActivity {
+    color: #1176A2;
+    padding: 0;
+    margin: 0;
+}
+
+.containertitle {
+    display: flex;
+    border-bottom: solid #1176A2;
+    border-width: 1px;
+    margin-right: 10px;
+}
+
+.durationActivity {
+    font-size: 70%;
+    padding: 0;
+    margin: 0;
+}
+
+.titleActivityArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.activity {
+    margin: 10px;
+}
+
+.activityArea {
+    overflow-y: scroll;
+    height: 100px;
+}
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #D7D7D7;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #169BD5;
+}
+
+table {
+    background: #f0f8ff;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+    width: 70%;
+}
+table, th, td {
+    border: 1px solid #ffffff;
+}

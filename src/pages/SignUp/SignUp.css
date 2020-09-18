@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo {
+    display: flex;
+    color: #169BD5;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 30%;
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+    box-shadow: 2px 2px 2px #169BD5;
+}
+
+input {
+    align-items: center;
+    color: #777;
+    font-size: 15px;
+    width: 60%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0px 0px 20px;
+    height: 40px;
+    padding-left: 10px;
+}
+
+button {
+    color: #fff;
+    font-size: 16px;
+    background: #169BD5;
+    border: 0;
+    border-radius: 5px;
+    width: 50%;
+    margin: 0 0 20px 10px;
+    height: 40px;
+}
+
+.cadastroTexto {
+    color: #777;
+}
