@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Main.css';
 import { withRouter } from "react-router-dom";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import Header from '../../components/Header';
 import Card from '../../components/Card';
-import fire from '../../services/fire';
 import FormCard from '../../components/FormCard';
 
 const Main = () => {

@@ -1,11 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useContext} from 'react';
 import './FormCard.css';
 import { withRouter } from "react-router-dom";
+import { AuthContext } from "../services/auth";
 
-import fire from '../services/fire'
+
+import fire from '../services/fire';
 
 const FormCard = ({history, display}) => {
-    const handleAdd = useCallback(async event => {
+    const handleAddPatient = useCallback(async event => {
         event.preventDefault();
         const { email, password } = event.target.elements;
         try {
@@ -18,9 +20,26 @@ const FormCard = ({history, display}) => {
         }
     }, [history])
 
+    const { currentUser } = useContext(AuthContext);
+    if (currentUser) {
+        debugger;
+        let user = fire.auth().currentUser;
+        user.updateProfile({
+            displayName: document.querySelector('input').value
+        }).then(function () {
+            
+        }).catch(function (error) {
+            alert(error);
+        });
+    }
     return (
         <div class="containerW">
-            <form onSubmit={handleAdd} class="loginContainerW">
+            <form onSubmit={handleAddPatient} class="loginContainerW">
+            <input
+                    type="text"
+                    name="name"
+                    placeholder="Nome"
+                />
                 <input
                     type="email"
                     name="email"
