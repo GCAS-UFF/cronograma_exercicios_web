@@ -10,40 +10,61 @@ const Card = () => {
     const { currentUser } = useContext(AuthContext);
     const [exercises, setExercises] = useState([]);
     const [activities, setActivities] = useState([]);
+    const [user, setUser] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             const db = fire.firestore();
             db.collection("exercises").where("fisioId", "==", currentUser.uid)
                 .get()
                 .then(querySnapshot => {
-                    setExercises(querySnapshot.docs.map(doc => ({ ...doc.data(), activities: activities })));
-                    if (exercises.length > 0) {
-                        debugger;
-                        exercises.forEach(async (exercise) => { 
-                            const db = fire.firestore();
-                            db.collection("activities").where("exerciseId", "==", exercise.id)
-                                .get()
-                                .then(querySnapshot => {
-                                    setActivities(querySnapshot.docs.map(doc => ({ ...doc.data() })));
-                                });
-                        });
-                
-                    }
+                    setExercises(querySnapshot.docs.map(doc => ({ ...doc.data()})));
+                    //querySnapshot.forEach(function (doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        //console.log(doc.id, " => ", doc.data());
+                        //setExercises(doc.data());
+                        //setExercises({...doc.data()});
+                        // db.collection("activities").where("exerciseId", "==", doc.id)
+                        //     .get()
+                        //     .then(querySnapshot => {
+                        //         setActivities(querySnapshot.docs.map(d  => ({ ...d.data() })));   
+                        //     });
+                            //setExercises(querySnapshot.docs.map(doc => ({ ...doc.data(), activities: activities })));    
+                   // });
+                    db.collection("activities")
+                    .get()
+                    .then(querySnapshot => {
+                        setActivities(querySnapshot.docs.map(d  => ({ ...d.data()})));   
+                    });
+                    // setExercises(querySnapshot.docs.map(doc => ({ ...doc.data(), activities: activities })));
+                    // if (exercises.length > 0) {
+                    //     debugger;
+                    //     exercises.forEach(async (exercise) => {
+                    //         console.log('acti', exercise);
+                    //         const db = fire.firestore();
+                    //         db.collection("activities").where("exerciseId", "==", exercise.id)
+                    //             .get()
+                    //             .then(querySnapshot => {
+                    //                 console.log(querySnapshot);
+                    //                 setActivities(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+
+                    //                 console.log(activities);
+                    //             });
+                    //     });
+                    // }
+                    fire.database().ref('users').once("value", snap =>
+                    setUser({...snap.value()}));
                 });
         };
         fetchData();
+    }, [currentUser.uid]);
 
-    }, []);
 
-
-    console.log(exercises);
-    console.log(activities);
     return (
         <div>
             {exercises.map((exercise) => (
                 < div class="card" >
                     <div class="titleArea">
-                        <p class="title">Paciente 2</p>
+                        <p class="title">{exercise.userId}</p>
                         <div class="buttonAdd"><AddCircleIcon style={{ color: '#169BD5', fontSize: 50 }}></AddCircleIcon></div>
                     </div>
                     <div class="activityArea">
@@ -55,7 +76,7 @@ const Card = () => {
                         </div>
                         <div class="activity">
                             <table>
-                                {exercise.activities.map(activity => (
+                                {activities.filter(a => a.exerciseId === exercise.id).map(activity => (
                                     <tr>
                                         <td>{activity.status}</td>
                                         <td>{activity.time}</td>
