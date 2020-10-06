@@ -1,6 +1,7 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useMemo } from 'react';
 import './Card.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import * as admin from 'firebase-admin';
 
 import fire from '../services/fire';
 import { AuthContext } from "../services/auth";
@@ -17,46 +18,38 @@ const Card = () => {
             db.collection("exercises").where("fisioId", "==", currentUser.uid)
                 .get()
                 .then(querySnapshot => {
-                    setExercises(querySnapshot.docs.map(doc => ({ ...doc.data()})));
-                    //querySnapshot.forEach(function (doc) {
-                        // doc.data() is never undefined for query doc snapshots
-                        //console.log(doc.id, " => ", doc.data());
-                        //setExercises(doc.data());
-                        //setExercises({...doc.data()});
-                        // db.collection("activities").where("exerciseId", "==", doc.id)
-                        //     .get()
-                        //     .then(querySnapshot => {
-                        //         setActivities(querySnapshot.docs.map(d  => ({ ...d.data() })));   
-                        //     });
-                            //setExercises(querySnapshot.docs.map(doc => ({ ...doc.data(), activities: activities })));    
-                   // });
-                    db.collection("activities")
-                    .get()
-                    .then(querySnapshot => {
-                        setActivities(querySnapshot.docs.map(d  => ({ ...d.data()})));   
-                    });
-                    // setExercises(querySnapshot.docs.map(doc => ({ ...doc.data(), activities: activities })));
-                    // if (exercises.length > 0) {
-                    //     debugger;
-                    //     exercises.forEach(async (exercise) => {
-                    //         console.log('acti', exercise);
-                    //         const db = fire.firestore();
-                    //         db.collection("activities").where("exerciseId", "==", exercise.id)
-                    //             .get()
-                    //             .then(querySnapshot => {
-                    //                 console.log(querySnapshot);
-                    //                 setActivities(querySnapshot.docs.map(doc => ({ ...doc.data() })));
-
-                    //                 console.log(activities);
-                    //             });
-                    //     });
-                    // }
-                    fire.database().ref('users').once("value", snap =>
-                    setUser({...snap.value()}));
+                    setExercises(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+                    // db.collection("activities")
+                    // .get()
+                    // .then(querySnapshot => {
+                    //     setActivities(querySnapshot.docs.map(d  => ({ ...d.data()})));   
+                    // }); 
                 });
         };
         fetchData();
     }, [currentUser.uid]);
+
+    useMemo(() => {
+        exercises.forEach(exercise => {
+            exercise.activities = [];
+            const db = fire.firestore();
+            db.collection("activities").where("exerciseId", "==", exercise.id)
+                .get()
+                .then(querySnapshot => {
+                    setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
+                    exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
+                    //const admin = require('firebase-admin');
+                    // admin.auth().getUser(exercise.userId)
+                    //     .then(function (userRecord) {
+                    //         // See the UserRecord reference doc for the contents of userRecord.
+                    //         console.log('Successfully fetched user data:', userRecord.toJSON());
+                    //     })
+                    //     .catch(function (error) {
+                    //         console.log('Error fetching user data:', error);
+                    //     });
+                })
+        });
+    }, [exercises]);
 
 
     return (
@@ -76,7 +69,7 @@ const Card = () => {
                         </div>
                         <div class="activity">
                             <table>
-                                {activities.filter(a => a.exerciseId === exercise.id).map(activity => (
+                                {exercise.activities.map(activity => (
                                     <tr>
                                         <td>{activity.status}</td>
                                         <td>{activity.time}</td>
