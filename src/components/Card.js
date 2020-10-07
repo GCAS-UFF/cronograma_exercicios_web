@@ -32,12 +32,20 @@ const Card = () => {
     useMemo(() => {
         exercises.forEach(exercise => {
             exercise.activities = [];
+            exercise.user = {};
             const db = fire.firestore();
             db.collection("activities").where("exerciseId", "==", exercise.id)
                 .get()
                 .then(querySnapshot => {
                     setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
                     exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
+                    db.collection("users").where("userId", "==", exercise.userId)
+                    .get()
+                    .then(querySnapshot => {
+                        setUser(querySnapshot.docs.map(d => ({ ...d.data() })));
+                        exercise.user = querySnapshot.docs.map(d => ({ ...d.data() }));
+                    })
+                    // console.log(fire.database.getReferences('users').equalTo(exercise.userId));
                     //const admin = require('firebase-admin');
                     // admin.auth().getUser(exercise.userId)
                     //     .then(function (userRecord) {
@@ -57,7 +65,7 @@ const Card = () => {
             {exercises.map((exercise) => (
                 < div class="card" >
                     <div class="titleArea">
-                        <p class="title">{exercise.userId}</p>
+                        <p class="title">{Object.keys(exercise.user).length === 0 ? "" : exercise.user[0].name}</p>
                         <div class="buttonAdd"><AddCircleIcon style={{ color: '#169BD5', fontSize: 50 }}></AddCircleIcon></div>
                     </div>
                     <div class="activityArea">
