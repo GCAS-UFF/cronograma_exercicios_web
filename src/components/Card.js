@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState, useMemo } from 'react';
 import './Card.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import * as admin from 'firebase-admin';
+import { Redirect } from "react-router-dom";
 
 import fire from '../services/fire';
 import { AuthContext } from "../services/auth";
@@ -15,6 +16,12 @@ const Card = () => {
     useEffect(() => {
         const fetchData = async () => {
             const db = fire.firestore();
+            db.collection("users").where("fisioId", "==", currentUser.uid)
+                .get()
+                .then(
+                    querySnapshot => {
+                        setUser(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+                    });
             db.collection("exercises").where("fisioId", "==", currentUser.uid)
                 .get()
                 .then(querySnapshot => {
@@ -30,21 +37,23 @@ const Card = () => {
     }, [currentUser.uid]);
 
     useMemo(() => {
+        //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
         exercises.forEach(exercise => {
             exercise.activities = [];
-            exercise.user = {};
+            //exercise.user = {};
             const db = fire.firestore();
             db.collection("activities").where("exerciseId", "==", exercise.id)
                 .get()
                 .then(querySnapshot => {
                     setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
                     exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
-                    db.collection("users").where("userId", "==", exercise.userId)
-                    .get()
-                    .then(querySnapshot => {
-                        setUser(querySnapshot.docs.map(d => ({ ...d.data() })));
-                        exercise.user = querySnapshot.docs.map(d => ({ ...d.data() }));
-                    })
+                    // db.collection("activities").where("exerciseId", "==", exercise.id)
+                    //     .get()
+                    //     .then(querySnapshot => {
+                    //         setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
+                    //         exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
+                    //     })
+                    //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {})
                     // console.log(fire.database.getReferences('users').equalTo(exercise.userId));
                     //const admin = require('firebase-admin');
                     // admin.auth().getUser(exercise.userId)
@@ -59,39 +68,49 @@ const Card = () => {
         });
     }, [exercises]);
 
+    const addExercise = () =>{
+        return <Redirect to="/registerExercise" />
+    }
 
     return (
         <div>
-            {exercises.map((exercise) => (
+            {user.map(us =>
                 < div class="card" >
                     <div class="titleArea">
-                        <p class="title">{Object.keys(exercise.user).length === 0 ? "" : exercise.user[0].name}</p>
-                        <div class="buttonAdd"><AddCircleIcon style={{ color: '#169BD5', fontSize: 50 }}></AddCircleIcon></div>
+                        <p class="title">{us.name}</p>
+                        <div class="buttonAdd" onClick={addExercise}><AddCircleIcon style={{ color: '#169BD5', fontSize: 50 }}></AddCircleIcon></div>
                     </div>
-                    <div class="activityArea">
-                        <div class="containertitle">
-                            <div class="titleActivityArea">
-                                <p class="titleActivity">{exercise.title}</p>
-                                <p class="durationActivity">Início: {new Date(exercises[0].startDate.seconds * 1000).toLocaleDateString("pt-BR")} Fim: {new Date(exercises[0].endDate.seconds * 1000).toLocaleDateString("pt-BR")}</p>
-                            </div>
-                        </div>
-                        <div class="activity">
-                            <table>
-                                {exercise.activities.map(activity => (
-                                    <tr>
-                                        <td>{activity.status}</td>
-                                        <td>{activity.time}</td>
-                                        <td>11/09/2020 11h</td>
-                                    </tr>
+                    {exercises
+                        .filter(exercise => exercise.userId === us.userId)
+                        .map((exercise) => (
+                            <div>
+                                <div class="activityArea">
+                                    <div class="containertitle">
+                                        <div class="titleActivityArea">
+                                            <p class="titleActivity">{exercise.title}</p>
+                                            <p class="durationActivity">Início: {new Date(exercises[0].startDate.seconds * 1000).toLocaleDateString("pt-BR")} Fim: {new Date(exercises[0].endDate.seconds * 1000).toLocaleDateString("pt-BR")}</p>
+                                        </div>
+                                    </div>
+                                    <div class="activity">
+                                        <table>
+                                            {exercise.activities.map(activity => (
+                                                <tr>
+                                                    <td>{activity.status}</td>
+                                                    <td>{activity.time}</td>
+                                                    <td>11/09/2020 11h</td>
+                                                </tr>
 
-                                ))}
-                            </table>
-                        </div>
-                    </div>
+                                            ))}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        )
+                        )
+                    }
                 </div >
-            )
-            )
-            }
+            )}
         </div>
 
     );

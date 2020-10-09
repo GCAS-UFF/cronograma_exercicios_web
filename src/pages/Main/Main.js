@@ -14,8 +14,8 @@ const Main = () => {
     }
 
     const close = (event) => {
-        debugger;
-        console.log(event.target.classList);
+        //debugger;
+        //console.log(event.target.classList);
         if (displayForm && event.target.tagName !== "FORM" && typeof(event.target.form) === "undefined")//)
             setDisplayForm(false);
     }
