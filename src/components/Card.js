@@ -69,7 +69,7 @@ const Card = () => {
     }, [exercises]);
 
     const addExercise = () =>{
-        return <Redirect to="/registerExercise" />
+        return <Redirect to={"/registerExercise"} />
     }
 
     return (
