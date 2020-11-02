@@ -1,0 +1,34 @@
+.hours{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+}
+.containerHours
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 15px;
+}
+.containerHour {
+    display: flex;
+    flex-direction: row;
+}   
+.containerHour input{
+    width:30px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-right: 3px;
+}
+.containerHour label{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+}
+
+
