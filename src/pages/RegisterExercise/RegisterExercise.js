@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useMemo } from 'react';
+import React from 'react';
 import { withRouter } from "react-router-dom";
 import Header from '../../components/Header';
 import './RegisterExercise.css';
