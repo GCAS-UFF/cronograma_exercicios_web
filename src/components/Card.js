@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useMemo } from 'react';
 import './Card.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import fire from '../services/fire';
 import { AuthContext } from "../services/auth";
@@ -45,9 +45,15 @@ const Card = () => {
         });
     }, [exercises]);
 
-    const addExercise = () =>{
-        return <Redirect to={"/registerExercise"} />
-    }
+    // const addExercise = (userId) => {
+    //     debugger;
+    //     return 
+    //     // <Link to="/registerExercise"/>
+    //     <Redirect to={{
+    //         pathname: "/registerExercise",
+    //         state: { userId: userId }
+    //     }} />
+    // }
 
     return (
         <div>
@@ -55,7 +61,9 @@ const Card = () => {
                 < div class="card" >
                     <div class="titleArea">
                         <p class="title">{us.name}</p>
-                        <div class="buttonAdd" onClick={addExercise}><AddCircleIcon style={{ color: '#169BD5', fontSize: 50 }}></AddCircleIcon></div>
+                        <Link to={`/registerExercise/${us.userId}`}>
+                            <AddCircleIcon style={{ color: '#169BD5', fontSize: 50 }}></AddCircleIcon>
+                        </Link>
                     </div>
                     {exercises
                         .filter(exercise => exercise.userId === us.userId)
