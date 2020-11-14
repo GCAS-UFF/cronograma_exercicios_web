@@ -56,7 +56,6 @@
 .activity {
     display: flex;
     overflow-y: scroll;
-    max-height: 150px;
     margin: 10px;
 }
 /* width */

@@ -1,5 +1,5 @@
-import React, { useCallback, useParams } from 'react';
-import { withRouter, useLocation } from "react-router-dom";
+import React, { useCallback } from 'react';
+import { withRouter } from "react-router-dom";
 
 import Header from '../../components/Header';
 import './RegisterExercise.css';
@@ -7,7 +7,7 @@ import fire from '../../services/fire';
 
 const RegisterExercise = props => {
     //let { userId } = useParams();
-    var test = useLocation().search;
+    
     const _onFocus = (e) => {
         e.currentTarget.type = "date";
     }

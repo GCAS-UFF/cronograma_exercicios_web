@@ -10,3 +10,10 @@ header {
     width: 50px;
     float: right;
 }
+.nameUser {
+    float: right;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-left: 10px;
+    color: #027DB4;
+}

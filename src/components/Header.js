@@ -21,9 +21,13 @@ const SignOut = () => {
 }
 
 const Header = () => {
+    const { currentUser } = useContext(AuthContext);
     return (
         <header>Cronograma exercícios
+            
             <SignOut />
+            {currentUser ? 
+            <div class="nameUser">Bem vindo(a) {currentUser.displayName == null ? currentUser.email : currentUser.displayName}!</div> : null}
         </header>
 
     );

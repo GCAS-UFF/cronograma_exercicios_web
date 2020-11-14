@@ -7,7 +7,7 @@ import fire from '../services/fire';
 import { AuthContext } from "../services/auth";
 
 
-const Card = () => {
+const Card = props => {
     const { currentUser } = useContext(AuthContext);
     const [exercises, setExercises] = useState([]);
     const [activities, setActivities] = useState([]);
@@ -15,7 +15,7 @@ const Card = () => {
     useEffect(() => {
         const fetchData = async () => {
             const db = fire.firestore();
-            db.collection("users").where("fisioId", "==", currentUser.uid)
+            db.collection("users").where("userId", "==", props.user)
                 .get()
                 .then(
                     querySnapshot => {
@@ -28,7 +28,7 @@ const Card = () => {
                 });
         };
         fetchData();
-    }, [currentUser.uid]);
+    }, [props.user]);
 
     useMemo(() => {
         //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
