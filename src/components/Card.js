@@ -73,7 +73,10 @@ const Card = props => {
                                     <div class="containertitle">
                                         <div class="titleActivityArea">
                                             <p class="titleActivity">{exercise.title}</p>
-                                            <p class="durationActivity">Início: {new Date(exercises[0].startDate.seconds * 1000).toLocaleDateString("pt-BR")} Fim: {new Date(exercises[0].endDate.seconds * 1000).toLocaleDateString("pt-BR")}</p>
+                                            <p class="durationActivity">
+                                                Início: {new Date(exercise.startDate.seconds * 1000).toLocaleDateString("pt-BR") + " " + new Date(exercise.startDate.seconds * 1000).toTimeString().slice(0, 5)
+                                                } Fim: {new Date(exercise.endDate.seconds * 1000).toLocaleDateString("pt-BR") + " " + new Date(exercise.endDate.seconds * 1000).toTimeString().slice(0, 5)
+                                                }</p>
                                         </div>
                                     </div>
                                     <div class="activity">
@@ -82,7 +85,11 @@ const Card = props => {
                                                 <tr>
                                                     <td>{activity.status}</td>
                                                     <td>{activity.time}</td>
-                                                    <td>11/09/2020 11h</td>
+                                                    <td>{
+                                                        new Date(activity.updatedAt.seconds * 1000).toLocaleDateString("pt-BR")
+                                                        //+ " " + new Date(activity.updatedAt.seconds * 1000).toTimeString().slice(0, 5)
+                                                    }
+                                                    </td>
                                                 </tr>
 
                                             ))}

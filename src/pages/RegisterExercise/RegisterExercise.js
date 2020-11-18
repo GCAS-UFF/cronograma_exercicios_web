@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { withRouter } from "react-router-dom";
 
 import Header from '../../components/Header';
 import './RegisterExercise.css';
 import fire from '../../services/fire';
+import { AuthContext } from "../../services/auth";
 
 const RegisterExercise = props => {
     //let { userId } = useParams();
-    
+    const { currentUser } = useContext(AuthContext);
     const _onFocus = (e) => {
         e.currentTarget.type = "date";
     }
@@ -35,9 +36,12 @@ const RegisterExercise = props => {
             startDate: new Date(startDate.value),
             title: title.value,
             updatedAt: new Date(),
-            userId: userId
+            userId: userId,
+            fisioId: currentUser.uid
         })
             .then(function (docRef) {
+                debugger;
+                db.collection("exercises").doc(docRef.id).update({id: docRef.id});
                 console.log("Document written with ID: ", docRef.id);
             })
             .catch(function (error) {
