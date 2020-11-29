@@ -17,3 +17,6 @@ header {
     padding-left: 10px;
     color: #027DB4;
 }
+a {
+    text-decoration: none;
+}

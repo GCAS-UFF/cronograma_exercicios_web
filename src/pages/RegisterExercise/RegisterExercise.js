@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 
 import Header from '../../components/Header';
 import './RegisterExercise.css';
@@ -16,7 +16,7 @@ const RegisterExercise = props => {
         e.currentTarget.type = "text";
     }
     const handleAddExercise = useCallback(async event => {
-        debugger;
+        //debugger;
         let userId = props.match.params.userId;
         const db = fire.firestore();
         event.preventDefault();
@@ -24,7 +24,7 @@ const RegisterExercise = props => {
         let hours = [];
         const elementHours = event.target.elements.hours;
         //[...elementHours].reduce((ex, checked) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
-        [...elementHours].filter(e => e.checked === true).map(element => hours.push(element.value+":00"));
+        [...elementHours].filter(e => e.checked === true).map(element => hours.push(element.value + ":00"));
         //console.log(hours);
         db.collection("exercises").add({
             active: true,
@@ -40,9 +40,32 @@ const RegisterExercise = props => {
             fisioId: currentUser.uid
         })
             .then(function (docRef) {
-                debugger;
-                db.collection("exercises").doc(docRef.id).update({id: docRef.id});
+                //debugger;
+                db.collection("exercises").doc(docRef.id).update({ id: docRef.id });
                 console.log("Document written with ID: ", docRef.id);
+                let date = new Date(startDate.value);
+                let dates = [];
+                for (date; date <= new Date(endDate.value); date.setDate(date.getDate() + 1)) {
+                    hours.map(hour => dates.push(new Date(date.setHours(parseInt(hour.replace(":00", ""))))));
+                }
+                dates.map(date => {
+                    db.collection("activities").add({
+                        createdAt: new Date(),
+                        exerciseId: docRef.id,
+                        status: "Agendada",
+                        time: (date.getHours()).toString()+":00",
+                        updatedAt: date
+                    })
+                    .then(function (docRef) {
+                        //debugger;
+                        db.collection("activities").doc(docRef.id).update({ id: docRef.id });
+                        console.log("Document written with ID: ", docRef.id)
+                    })
+                    .catch(function (error) {
+                        console.error("Error adding document: ", error);
+                    });
+                })             
+
             })
             .catch(function (error) {
                 console.error("Error adding document: ", error);

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-
+import { Link } from "react-router-dom";
 
 import './Header.css';
 import fire from '../services/fire';
@@ -23,12 +23,14 @@ const SignOut = () => {
 const Header = () => {
     const { currentUser } = useContext(AuthContext);
     return (
+        <Link to={`/main`}>    
         <header>Cronograma exercícios
             
             <SignOut />
             {currentUser ? 
             <div class="nameUser">Bem vindo(a) {currentUser.displayName == null ? currentUser.email : currentUser.displayName}!</div> : null}
         </header>
+        </Link>
 
     );
 }
