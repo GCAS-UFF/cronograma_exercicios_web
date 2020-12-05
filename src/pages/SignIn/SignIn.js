@@ -50,6 +50,7 @@ const SignIn = ({ history }) => {
                     />
                     <button type="submit">Entrar</button>
                     <p class="cadastroTexto">Ainda não possui cadastro? <Link to="/signUp">Cadastrar</Link></p>
+                    <Link to="/passwordReset">Esqueci a senha</Link>
                 </form> 
                 <AuthProvider/>
             </div>
