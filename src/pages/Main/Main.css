@@ -14,13 +14,22 @@
     justify-content: flex-end;
 }
 .containerTopWidgets button {
-    font-size: 16px;
+    height: 3.5em;
+    font-size: 1em;
     margin: 1%;
     width: 25%;
     text-align: center;
 }
 .containerTopWidgets input {
-    font-size: 16px;
+    font-size: 1em;
+    width: 5em;
     margin: 1%;
     width: 30%;
+}
+.MuiAutocomplete-root{
+    width: 15em;
+    margin-top: 0.5em;
+}
+.MuiTouchRipple-root{
+    margin-bottom: 2em;
 }
