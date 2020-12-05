@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
+import PassowrdReset from './pages/PasswordReset/PasswordReset';
 import Main from './pages/Main/Main'
 import RegisterExercise from './pages/RegisterExercise/RegisterExercise';
 import { AuthContext, AuthProvider } from "./services/auth";
@@ -31,6 +32,7 @@ const Routes = () => (
       <Route exact path="/" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/signIn" component={SignIn} />
+      <Route path="/passwordReset" component={PassowrdReset} />
       <PrivateRoute exact path="/main" component={Main} />
       <PrivateRoute exact path="/registerExercise/:userId" component={RegisterExercise} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
