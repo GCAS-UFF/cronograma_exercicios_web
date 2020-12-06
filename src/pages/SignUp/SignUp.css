@@ -17,7 +17,7 @@
     flex-direction: column;
     background-color: #ffffff;
     border-radius: 0.5em;
-    width: 40%;
+    width: 30%;
     align-items: center;
     justify-content: center;
     padding: 2%;
@@ -34,17 +34,6 @@ input {
     margin: 0px 0px 1em;
     height: 1em;
     padding-left: 0.1em;
-}
-
-button {
-    color: #fff;
-    font-size: 1.5em;
-    background: #169BD5;
-    border: 0;
-    border-radius: 5px;
-    width: 50%;
-    margin: 0 0 1em 0.5em;
-    height: 2em;
 }
 
 .cadastroTexto {
