@@ -1,14 +1,32 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { withRouter, Redirect } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import Header from '../../components/Header';
 import './RegisterExercise.css';
 import fire from '../../services/fire';
 import { AuthContext } from "../../services/auth";
+import Button from '../../components/Button'
 
 const RegisterExercise = props => {
-    //let { userId } = useParams();
+
     const { currentUser } = useContext(AuthContext);
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [type, setType] = useState('');
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+        setMsg('');
+      };
+
     const _onFocus = (e) => {
         e.currentTarget.type = "date";
     }
@@ -16,7 +34,7 @@ const RegisterExercise = props => {
         e.currentTarget.type = "text";
     }
     const handleAddExercise = useCallback(async event => {
-        //debugger;
+        setLoading(true);
         let userId = props.match.params.userId;
         const db = fire.firestore();
         event.preventDefault();
@@ -59,16 +77,33 @@ const RegisterExercise = props => {
                     .then(function (docRef) {
                         //debugger;
                         db.collection("activities").doc(docRef.id).update({ id: docRef.id });
-                        console.log("Document written with ID: ", docRef.id)
+                        setMsg('Exercício cadastrado com sucesso');
+                        setType("success")
+                        setOpen(true);
+                        setLoading(false);
+                        title.value=""; 
+                        startDate.value = null; 
+                        endDate.value=null;
+                        duration.value=null; 
+                        repetitionsPerSeries.value=null;
+                        console.log("Document written with ID: ", docRef.id);
                     })
                     .catch(function (error) {
                         console.error("Error adding document: ", error);
+                setOpen(true);
+                setType("error");
+                setLoading(false);
+                setMsg('Ocorreu um erro ao cadastrar o exercício. Por favor, tente novamente mais tarde.');
                     });
                 })             
 
             })
             .catch(function (error) {
                 console.error("Error adding document: ", error);
+                setOpen(true);
+                setType("error");
+                setLoading(false);
+                setMsg('Ocorreu um erro ao cadastrar o exercício. Por favor, tente novamente mais tarde.');
             });
     })
     return (
@@ -82,28 +117,33 @@ const RegisterExercise = props => {
                         type="text"
                         name="title"
                         placeholder="Título"
+                        required
                     />
                     <input
                         type="text"
                         name="startDate"
                         onFocus={_onFocus} onBlur={_onBlur}
                         placeholder="Data Início"
+                        required
                     />
                     <input
                         type="text"
                         name="endDate"
                         onFocus={_onFocus} onBlur={_onBlur}
                         placeholder="Data Fim"
+                        required
                     />
                     <input
                         type="time"
                         name="duration"
                         placeholder="Duração"
+                        required
                     />
                     <input
                         type="number"
                         name="repetitionsPerSeries"
                         placeholder="Repetições por série"
+                        required
                     />
                     <div class="hours">
                         <div class="containerHours">
@@ -189,7 +229,12 @@ const RegisterExercise = props => {
                             </div>
                         </div>
                     </div>
-                    <button type="submit">Cadastrar</button>
+                    <Button loading={loading} disabled={disabled} value="Cadastrar"/>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity={type}>
+                            {msg}
+                        </Alert>
+                    </Snackbar>
                 </form>
             </div>
         </div>)
