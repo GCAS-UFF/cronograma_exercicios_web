@@ -37,10 +37,14 @@ const Card = props => {
             //exercise.user = {};
             const db = fire.firestore();
             db.collection("activities").where("exerciseId", "==", exercise.id)
+                .orderBy("prescribedTo", "asc")
                 .get()
                 .then(querySnapshot => {
                     setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
                     exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
+                })
+                .catch(err => {
+                    console.log("ERRO:", err);
                 })
         });
     }, [exercises]);
@@ -81,15 +85,26 @@ const Card = props => {
                                     </div>
                                     <div class="activity">
                                         <table>
+                                            <tr>
+                                                <th>Status</th>
+                                                <th>Horário</th>
+                                                <th>Prescrita para</th>
+                                                <th>Registrada em</th>
+                                            </tr>
                                             {exercise.activities.map(activity => (
                                                 <tr>
                                                     <td>{activity.status}</td>
                                                     <td>{activity.time}</td>
                                                     <td>{
-                                                        new Date(activity.updatedAt.seconds * 1000).toLocaleDateString("pt-BR")
+                                                        new Date(activity.prescribedTo.seconds * 1000).toLocaleDateString("pt-BR")
                                                         //+ " " + new Date(activity.updatedAt.seconds * 1000).toTimeString().slice(0, 5)
                                                     }
                                                     </td>
+                                                    <td>{
+                                                        (activity.statusChangedAt != null) ?
+                                                        new Date(activity.statusChangedAt.seconds * 1000).toLocaleString("pt-BR") :
+                                                        "---"
+                                                    }</td>
                                                 </tr>
 
                                             ))}
