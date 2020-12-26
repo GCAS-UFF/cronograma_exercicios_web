@@ -26,16 +26,18 @@ const RegisterExercise = props => {
         //[...elementHours].reduce((ex, checked) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
         [...elementHours].filter(e => e.checked === true).map(element => hours.push(element.value + ":00"));
         //console.log(hours);
+        
+        let now = new Date();
         db.collection("exercises").add({
             active: true,
-            createdAt: new Date(),
-            endDate: new Date(endDate.value),
-            repetitionsPerSeries: repetitionsPerSeries.value,
+            createdAt: now,
+            endDate: new Date(endDate.value + " 00:00:00"),
+            repetitionsPerSeries: parseInt(repetitionsPerSeries.value),
             seriesDuration: duration.value,
             seriesTimes: hours,
-            startDate: new Date(startDate.value),
+            startDate: new Date(startDate.value + " 00:00:00"),
             title: title.value,
-            updatedAt: new Date(),
+            updatedAt: now,
             userId: userId,
             fisioId: currentUser.uid
         })
@@ -50,11 +52,12 @@ const RegisterExercise = props => {
                 }
                 dates.map(date => {
                     db.collection("activities").add({
-                        createdAt: new Date(),
+                        createdAt: now,
                         exerciseId: docRef.id,
                         status: "Agendada",
                         time: (date.getHours()).toString()+":00",
-                        updatedAt: date
+                        updatedAt: now,
+                        prescribedTo: date,
                     })
                     .then(function (docRef) {
                         //debugger;
