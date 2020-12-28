@@ -11,24 +11,24 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 10px;
-    padding: 15px;
+    margin: 1em;
+    padding: 1em;
 }
 .containerHour {
     display: flex;
     flex-direction: row;
 }   
 .containerHour input{
-    width:30px;
+    width:2em;
     justify-content: center;
     align-items: flex-start;
-    margin-right: 3px;
+    margin-right: 0.5em;
 }
 .containerHour label{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
+    height: 2.5em;
 }
 
 

@@ -8,7 +8,7 @@
 .titulo {
     display: flex;
     color: #169BD5;
-    font-size: 30px;
+    font-size: 2em;
     font-weight: 500;
 }
 
@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
-    border-radius: 10px;
+    border-radius: 0.5em;
     width: 30%;
     align-items: center;
     justify-content: center;
@@ -27,24 +27,13 @@
 input {
     align-items: center;
     color: #777;
-    font-size: 15px;
-    width: 60%;
+    font-size: 1.5em;
+    width: 70%;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 0px 0px 20px;
-    height: 40px;
-    padding-left: 10px;
-}
-
-button {
-    color: #fff;
-    font-size: 16px;
-    background: #169BD5;
-    border: 0;
-    border-radius: 5px;
-    width: 50%;
-    margin: 0 0 20px 10px;
-    height: 40px;
+    border-radius: 0.5em;
+    margin: 0px 0px 1em;
+    height: 1em;
+    padding-left: 0.1em;
 }
 
 .cadastroTexto {

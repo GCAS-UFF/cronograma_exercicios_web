@@ -56,7 +56,7 @@ const Main = () => {
             {displayForm ? <FormCard /> : null}
             <div class="containerTop">
                 <div class="containerTopWidgets">
-                    <button style={{ height: 60.5, marginTop: 0 }} onClick={handleAddUser}>
+                    <button onClick={handleAddUser}>
                         <AddCircleIcon style={{ verticalAlign: 'middle' }} /> Adicionar Paciente
                     </button>
                     <Autocomplete
@@ -65,7 +65,6 @@ const Main = () => {
                             option.fisioId === currentUser.uid || option.fisioId === null)}
                         getOptionLabel={(option) => option.name}
                         onChange={handleAutocomplete}
-                        style={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Buscar Paciente" variant="outlined" />}
                     />
 

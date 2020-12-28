@@ -1,14 +1,33 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import './SignIn.css';
 import { Link, withRouter, Redirect } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
-import Header from '../../components/Header';
+
 import fire from "../../services/fire";
+import Button from '../../components/Button';
 import { AuthContext, AuthProvider } from "../../services/auth";
 
 const SignIn = ({ history }) => {
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
+
+    fire.auth().languageCode = 'PT-BR'; // para a mensagem de troca de senha ser em pt-br
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+        setMsg('');
+      };
+
     const handleLogin = useCallback(
         async event => {
+            setLoading(true);
             event.preventDefault();
             const { email, password } = event.target.elements;
             try {
@@ -17,7 +36,9 @@ const SignIn = ({ history }) => {
                     .signInWithEmailAndPassword(email.value, password.value);
                 history.push("/");
             } catch (error) {
-                alert(error);
+                setOpen(true);
+                setMsg(error.message);
+                setLoading(false);
             }
         },
         [history]
@@ -32,7 +53,6 @@ const SignIn = ({ history }) => {
 
     return (
         <div>
-            <Header />
             <div class="container">
                 <p class="titulo">Entrar</p>
                 <form onSubmit={handleLogin} class="loginContainer">
@@ -41,16 +61,23 @@ const SignIn = ({ history }) => {
                         type="email"
                         placeholder="Email"
                         onChange={e => { }}
+                        required
                     />
                     <input
                         name="password"
                         type="password"
                         placeholder="Senha"
                         onChange={e => { }}
+                        required
                     />
-                    <button type="submit">Entrar</button>
+                    <Button loading={loading} disabled={disabled} value="Entrar" />
                     <p class="cadastroTexto">Ainda não possui cadastro? <Link to="/signUp">Cadastrar</Link></p>
                     <Link to="/passwordReset">Esqueci a senha</Link>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error">
+                            {msg}
+                        </Alert>
+                    </Snackbar>
                 </form> 
                 <AuthProvider/>
             </div>
