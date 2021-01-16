@@ -5,11 +5,12 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 
 import './Main.css';
-import Header from '../../components/Header';
+// import Header from '../../components/Header';
 import Card from '../../components/Card';
 import FormCard from '../../components/FormCard';
 import fire from '../../services/fire';
 import { AuthContext } from "../../services/auth";
+import NavBar from '../../components/NavBar';
 
 const Main = () => {
     const [displayForm, setDisplayForm] = useState(false);
@@ -51,25 +52,25 @@ const Main = () => {
     return (
 
         <div onClick={close}>
-
-            <Header />
+            <NavBar />
+            {/* <Header /> */}
             {displayForm ? <FormCard /> : null}
-            <div class="containerTop">
-                <div class="containerTopWidgets">
-                    <button onClick={handleAddUser}>
-                        <AddCircleIcon style={{ verticalAlign: 'middle' }} /> Adicionar Paciente
+                <div class="containerTop">
+                    <div class="containerTopWidgets">
+                        <button onClick={handleAddUser}>
+                            <AddCircleIcon style={{ verticalAlign: 'middle' }} /> Adicionar Paciente
                     </button>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        options={userWithoutFisio.filter(option => 
-                            option.fisioId === currentUser.uid || option.fisioId === null)}
-                        getOptionLabel={(option) => option.name}
-                        onChange={handleAutocomplete}
-                        renderInput={(params) => <TextField {...params} label="Buscar Paciente" variant="outlined" />}
-                    />
+                        <Autocomplete
+                            id="combo-box-demo"
+                            options={userWithoutFisio.filter(option =>
+                                option.fisioId === currentUser.uid || option.fisioId === null)}
+                            getOptionLabel={(option) => option.name}
+                            onChange={handleAutocomplete}
+                            renderInput={(params) => <TextField {...params} label="Buscar Paciente" variant="outlined" />}
+                        />
 
+                    </div>
                 </div>
-            </div>
             <Card user={userSelected} />
         </div>
     )
