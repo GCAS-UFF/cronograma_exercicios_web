@@ -3,7 +3,7 @@ import { withRouter, Redirect } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
-import Header from '../../components/Header';
+import NavBar from '../../components/NavBar';
 import './RegisterExercise.css';
 import fire from '../../services/fire';
 import { AuthContext } from "../../services/auth";
@@ -112,7 +112,7 @@ const RegisterExercise = props => {
     return (
 
         <div>
-            <Header />
+            <NavBar />
             <div class="container">
                 <p class="titulo">Cadastrar Exercício</p>
                 <form onSubmit={handleAddExercise} class="loginContainer">

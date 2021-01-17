@@ -49,23 +49,24 @@ export default function NavBar() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  console.log('anchor1 ', anchorEl)
   const StyledMenu = withStyles({
     paper: {
       border: '1px solid #027DB4',
     },
   })((props) => (
     <Menu
-      elevation={0}
-      getContentAnchorEl={null}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
-      {...props}
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
     />
   ));
 
@@ -121,6 +122,7 @@ export default function NavBar() {
             variant="contained"
             onClick={handleClick}>
             <MenuIcon style = {{color: '#027DB4'}}/>
+          </StyledIconButton>
             <div>
               <StyledMenu
                 id="customized-menu"
@@ -141,7 +143,7 @@ export default function NavBar() {
                 <StyledMenuItem
                   component={Link}
                   onClick={handleClose}
-                  to="/teste">
+                  to="/manage">
                   <ListItemIcon>
                     <SettingsIcon style = {{color: '#027DB4'}} fontSize="small" />
                   </ListItemIcon>
@@ -149,7 +151,6 @@ export default function NavBar() {
                 </StyledMenuItem>
               </StyledMenu>
             </div>
-          </StyledIconButton>
           <Typography variant="h5" align="justify" className={classes.title}>
             Cronograma exercícios
           </Typography>

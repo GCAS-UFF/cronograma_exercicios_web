@@ -55,8 +55,8 @@ const Main = () => {
             <NavBar />
             {/* <Header /> */}
             {displayForm ? <FormCard /> : null}
-                <div class="containerTop">
-                    <div class="containerTopWidgets">
+                <div className="containerTop">
+                    <div className="containerTopWidgets">
                         <button onClick={handleAddUser}>
                             <AddCircleIcon style={{ verticalAlign: 'middle' }} /> Adicionar Paciente
                     </button>
