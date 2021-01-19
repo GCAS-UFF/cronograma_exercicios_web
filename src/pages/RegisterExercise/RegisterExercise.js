@@ -62,7 +62,6 @@ const RegisterExercise = props => {
             .then(function (docRef) {
                 //debugger;
                 db.collection("exercises").doc(docRef.id).update({ id: docRef.id });
-                console.log("Document written with ID: ", docRef.id);
                 let date = new Date(startDate.value);
                 let dates = [];
                 for (date; date <= new Date(endDate.value); date.setDate(date.getDate() + 1)) {
@@ -89,20 +88,16 @@ const RegisterExercise = props => {
                         endDate.value=null;
                         duration.value=null; 
                         repetitionsPerSeries.value=null;
-                        console.log("Document written with ID: ", docRef.id);
                     })
                     .catch(function (error) {
-                        console.error("Error adding document: ", error);
                 setOpen(true);
                 setType("error");
                 setLoading(false);
                 setMsg('Ocorreu um erro ao cadastrar o exercício. Por favor, tente novamente mais tarde.');
                     });
                 })             
-
             })
             .catch(function (error) {
-                console.error("Error adding document: ", error);
                 setOpen(true);
                 setType("error");
                 setLoading(false);

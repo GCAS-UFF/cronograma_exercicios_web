@@ -8,7 +8,6 @@ import {
     FormControl
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import { Title } from '@material-ui/icons';
 
 const ModalChange = ({ uid, patientId, name }) => {
     const style = makeStyles(theme => ({

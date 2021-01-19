@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import cx from 'clsx';
 import GoogleFontLoader from 'react-google-font-loader';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Column, Row, Item } from '@mui-treasury/components/flex';
 import { useDynamicAvatarStyles } from '@mui-treasury/styles/avatar/dynamic';
 import SettingsIcon from '@material-ui/icons/Settings';
+import fire from '../../services/fire';
+import { AuthContext } from "../../services/auth";
 
 import {
     NoSsr,
@@ -42,8 +44,7 @@ const usePersonStyles = makeStyles(() => ({
   },
 }));
 
-const PersonItem = ({ src, name, friendCount }) => {
-  const avatarStyles = useDynamicAvatarStyles({ size: 56 });
+const PersonItem = ({ name, patientId, uid }) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -92,7 +93,7 @@ const PersonItem = ({ src, name, friendCount }) => {
                 onClose={handleClose}
                 disableAutoFocusItem
               >
-                  <ModalChange name={name}/>
+                  <ModalChange name={name} uid={uid} patientId={patientId}/>
               </Modal>
           </div>
         </Item>
@@ -146,6 +147,20 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Manage = React.memo(function Manage() {
+  const { currentUser } = useContext(AuthContext);
+  const [patients, setPatients] = useState([])
+  useEffect(() => {
+      const fetchData = async () => {
+          const db = fire.firestore();
+          db.collection("users").where("userId", "!=", currentUser.uid)
+              .get()
+              .then(
+                  querySnapshot => {
+                    setPatients(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+                  });
+      };
+      fetchData();
+  }, [currentUser.uid]);
   const styles = useStyles();
   return (
    <>
@@ -158,16 +173,22 @@ const Manage = React.memo(function Manage() {
       <Column p={0} gap={0} className={styles.card}>
         <Row wrap p={2} alignItems={'baseline'} className={styles.header}>
           <Item stretched className={styles.headline}>Meus Pacientes</Item>
-          {/* <Item className={styles.actions}>
-            <Link className={styles.link}>Refresh</Link> •{' '}
-            <Link className={styles.link}>See all</Link>
-          </Item> */}
         </Row>
-        <PersonItem name={'Amber Matthews'} friendCount={6} src={'https://i.pravatar.cc/300?img=10'} />
-        <Divider variant={'middle'} className={{root: styles.divider}} />
+        {patients.filter(
+          option =>
+          option.fisioId === currentUser.uid || option.fisioId === null
+        ).map(
+          patient => 
+          <div>
+            <PersonItem name={patient.name} patientId={patient.userId} uid={currentUser.uid} />
+            <Divider variant={'middle'} className={{root: styles.divider}} />
+          </div>
+        )}
+        {/* <PersonItem name={'Amber Matthews'} friendCount={6} src={'https://i.pravatar.cc/300?img=10'} />
+        
         <PersonItem name={'Russel Robertson'} friendCount={2} src={'https://i.pravatar.cc/300?img=20'} />
         <Divider variant={'middle'} className={{root: styles.divider}} />
-        <PersonItem name={'Kathleen Ellis'} friendCount={2} src={'https://i.pravatar.cc/300?img=30'} />
+        <PersonItem name={'Kathleen Ellis'} friendCount={2} src={'https://i.pravatar.cc/300?img=30'} /> */}
       </Column>
     </div>
     </>
