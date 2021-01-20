@@ -14,18 +14,20 @@ const Card = props => {
     const [user, setUser] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            const db = fire.firestore();
-            db.collection("users").where("userId", "==", props.user)
-                .get()
-                .then(
-                    querySnapshot => {
-                        setUser(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+            if (props.user) {
+                const db = fire.firestore();
+                db.collection("users").where("userId", "==", props.user)
+                    .get()
+                    .then(
+                        querySnapshot => {
+                            setUser(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+                        });
+                db.collection("exercises").where("fisioId", "==", currentUser.uid)
+                    .get()
+                    .then(querySnapshot => {
+                        setExercises(querySnapshot.docs.map(doc => ({ ...doc.data() })));
                     });
-            db.collection("exercises").where("fisioId", "==", currentUser.uid)
-                .get()
-                .then(querySnapshot => {
-                    setExercises(querySnapshot.docs.map(doc => ({ ...doc.data() })));
-                });
+            }
         };
         fetchData();
     }, [props.user]);
