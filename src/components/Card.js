@@ -28,7 +28,7 @@ const Card = props => {
                 });
         };
         fetchData();
-    }, [props.user]);
+    }, [props.user, currentUser.uid]);
 
     useMemo(() => {
         //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});

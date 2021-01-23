@@ -38,6 +38,7 @@ export default function NavBar() {
       display: 'flex',
       color: '#027DB4',
       position: 'static',
+      width: '100%',
       boxShadow: '0px 2px 4px -1px #027DB4, 0px 4px 5px 0px #ffffff, 0px 1px 10px 0px #027DB4',
     },
     title: {
@@ -49,7 +50,6 @@ export default function NavBar() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  console.log('anchor1 ', anchorEl)
   const StyledMenu = withStyles({
     paper: {
       border: '1px solid #027DB4',

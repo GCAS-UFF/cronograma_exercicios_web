@@ -1,24 +1,21 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import cx from 'clsx';
 import GoogleFontLoader from 'react-google-font-loader';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Column, Row, Item } from '@mui-treasury/components/flex';
-import { useDynamicAvatarStyles } from '@mui-treasury/styles/avatar/dynamic';
 import SettingsIcon from '@material-ui/icons/Settings';
 import fire from '../../services/fire';
 import { AuthContext } from "../../services/auth";
 
 import {
-    NoSsr,
-    Divider,
-    Link,
-    Typography,
-    IconButton,
-    Modal
-  } from '@material-ui/core'
+  NoSsr,
+  Divider,
+  Typography,
+  IconButton
+} from '@material-ui/core'
 
 import NavBar from '../../components/NavBar';
-import ModalChange from '../../components/ModalChange';
+import ConfirmationDialogRaw from '../../components/ConfirmationDialogRaw';
 
 const usePersonStyles = makeStyles(() => ({
   text: {
@@ -42,15 +39,36 @@ const usePersonStyles = makeStyles(() => ({
     borderColor: '#becddc',
     fontSize: '0.75rem',
   },
+  paper: {
+    width: '80%',
+    maxHeight: 435,
+  },
 }));
 
 const PersonItem = ({ name, patientId, uid }) => {
   const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [value, setValue] = React.useState('');
+  const { currentUser } = useContext(AuthContext);
+
   const handleOpen = () => {
-      setOpen(true);
+    setOpen(true);
+  };
+
+  const handleClose = (newValue) => {
+    
+
+    if (newValue) {
+      setValue(newValue);
+    }
+    const db = fire.firestore();
+    db.collection("users")//.where("fisioId", "==", currentUser.uid)
+    .where("userId", "==", patientId)
+    .get()
+    .then(querySnapshot => {querySnapshot.forEach(function(doc) {
+      // console.log(doc.id, " => ", doc.data());
+      db.collection("users").doc(doc.id).update({fisioId: value});
+      setOpen(false);
+  });})
   };
   const styles = usePersonStyles();
   const StyledIconButton = withStyles(theme => ({
@@ -61,40 +79,39 @@ const PersonItem = ({ name, patientId, uid }) => {
           color: theme.palette.common.white,
         },
       },
-      '&:hover':{
+      '&:hover': {
         backgroundColor: '#e5f2f7'
       }
     }
   }))(IconButton);
   return (
     <Row gap={0} p={2}>
-      {/* <Item>
-        <Avatar classes={avatarStyles} src={src} />
-      </Item> */}
       <Row wrap grow gap={0} minWidth={0}>
-        <Item grow minWidth={0}>
+        <Item grow minWidth={0} key={patientId}>
           <div className={cx(styles.name, styles.text)}>{name}</div>
-          {/* <div className={cx(styles.caption, styles.text)}>
-            {friendCount} mutual friends
-          </div> */}
         </Item>
-        <Item position={'middle'}>
+        <Item position={'middle'} key={patientId+'same    '}>
           <StyledIconButton className={styles.btn} variant={'outlined'}
             aria-controls="manage-menu"
             aria-haspopup="true"
             variant="contained"
             onClick={handleOpen}>
-            <SettingsIcon style = {{color: '#027DB4'}} fontSize="small" />
+            <SettingsIcon style={{ color: '#027DB4' }} fontSize="small" />
           </StyledIconButton>
           <div>
-          <Modal
-                id="manage-menu"               
-                open={Boolean(open)}
-                onClose={handleClose}
-                disableAutoFocusItem
-              >
-                  <ModalChange name={name} uid={uid} patientId={patientId}/>
-              </Modal>
+            <ConfirmationDialogRaw
+              classes={{
+                paper: styles.paper,
+              }}
+              id="manage-menu"
+              keepMounted
+              open={open}
+              onClose={handleClose}
+              value={value}
+              name={name}
+              uid={uid} 
+              patientId={patientId}
+            />
           </div>
         </Item>
       </Row>
@@ -103,13 +120,13 @@ const PersonItem = ({ name, patientId, uid }) => {
 };
 
 const useStyles = makeStyles(() => ({
-  root:{
-      display: 'flex',
-      justifyContent: 'center',
-      marginTop: 30,
-      flexDirection: 'column',
-      alignItems: 'center',
-      color: '#027DB4',
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 30,
+    flexDirection: 'column',
+    alignItems: 'center',
+    color: '#027DB4',
   },
   card: {
     width: '80%',
@@ -150,47 +167,47 @@ const Manage = React.memo(function Manage() {
   const { currentUser } = useContext(AuthContext);
   const [patients, setPatients] = useState([])
   useEffect(() => {
-      const fetchData = async () => {
-          const db = fire.firestore();
-          db.collection("users").where("userId", "!=", currentUser.uid)
-              .get()
-              .then(
-                  querySnapshot => {
-                    setPatients(querySnapshot.docs.map(doc => ({ ...doc.data() })));
-                  });
-      };
-      fetchData();
+    const fetchData = async () => {
+      const db = fire.firestore();
+      db.collection("users").where("userId", "!=", currentUser.uid)
+        .get()
+        .then(
+          querySnapshot => {
+            setPatients(querySnapshot.docs.map(doc => ({ ...doc.data() })));
+          });
+    };
+    fetchData();
   }, [currentUser.uid]);
   const styles = useStyles();
   return (
-   <>
-    <NavBar/>
-    <div className={styles.root}>   
-    <Typography variant="h5" className={styles.title}>Gerenciar Pacientes</Typography>
-      <NoSsr>
-        <GoogleFontLoader fonts={[{ font: 'Barlow', weights: [400, 600] }]} />
-      </NoSsr>
-      <Column p={0} gap={0} className={styles.card}>
-        <Row wrap p={2} alignItems={'baseline'} className={styles.header}>
-          <Item stretched className={styles.headline}>Meus Pacientes</Item>
-        </Row>
-        {patients.filter(
-          option =>
-          option.fisioId === currentUser.uid || option.fisioId === null
-        ).map(
-          patient => 
-          <div>
-            <PersonItem name={patient.name} patientId={patient.userId} uid={currentUser.uid} />
-            <Divider variant={'middle'} className={{root: styles.divider}} />
-          </div>
-        )}
-        {/* <PersonItem name={'Amber Matthews'} friendCount={6} src={'https://i.pravatar.cc/300?img=10'} />
+    <>
+      <NavBar />
+      <div className={styles.root}>
+        <Typography variant="h5" className={styles.title}>Gerenciar Pacientes</Typography>
+        <NoSsr>
+          <GoogleFontLoader fonts={[{ font: 'Barlow', weights: [400, 600] }]} />
+        </NoSsr>
+        <Column p={0} gap={0} className={styles.card}>
+          <Row wrap p={2} alignItems={'baseline'} className={styles.header}>
+            <Item stretched className={styles.headline}>Meus Pacientes</Item>
+          </Row>
+          {patients.filter(
+            option =>
+              option.fisioId === currentUser.uid || option.fisioId === null
+          ).map(
+            patient =>
+              <div>
+                <PersonItem name={patient.name} patientId={patient.userId} uid={currentUser.uid} />
+                <Divider variant={'middle'} className={{ root: styles.divider }} />
+              </div>
+          )}
+          {/* <PersonItem name={'Amber Matthews'} friendCount={6} src={'https://i.pravatar.cc/300?img=10'} />
         
         <PersonItem name={'Russel Robertson'} friendCount={2} src={'https://i.pravatar.cc/300?img=20'} />
         <Divider variant={'middle'} className={{root: styles.divider}} />
         <PersonItem name={'Kathleen Ellis'} friendCount={2} src={'https://i.pravatar.cc/300?img=30'} /> */}
-      </Column>
-    </div>
+        </Column>
+      </div>
     </>
   );
 });

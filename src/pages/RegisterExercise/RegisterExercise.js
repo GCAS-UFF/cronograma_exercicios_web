@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
@@ -95,7 +95,15 @@ const RegisterExercise = props => {
                 setLoading(false);
                 setMsg('Ocorreu um erro ao cadastrar o exercício. Por favor, tente novamente mais tarde.');
                     });
-                })             
+                })    
+                db.collection("users")
+                .where("userId", "==", userId)
+                .get()
+                .then(querySnapshot => {querySnapshot.forEach(function(doc) {
+                // console.log(doc.id, " => ", doc.data());
+                db.collection("users").doc(doc.id).update({fisioId: currentUser.uid});         
+                        })
+                    })        
             })
             .catch(function (error) {
                 setOpen(true);

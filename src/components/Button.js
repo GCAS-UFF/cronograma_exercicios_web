@@ -3,12 +3,11 @@ import './Button.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Button = props => {
-    debugger
     const button = document.getElementsByTagName("button");
 
     //const [text, setText] = useState(props.value);
 
-    if (!props.disabled)
+    if (!props.disabled)    
         button.disabled = true;
 
     else if (props.loading) {
