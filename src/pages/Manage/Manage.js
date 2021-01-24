@@ -54,8 +54,7 @@ const PersonItem = ({ name, patientId, uid }) => {
     setOpen(true);
   };
 
-  const handleClose = (newValue) => {
-    debugger
+  const handleClose = (newValue) => {    
     if (newValue) {
       setValue(newValue);
     }
@@ -67,6 +66,7 @@ const PersonItem = ({ name, patientId, uid }) => {
       // console.log(doc.id, " => ", doc.data());
       db.collection("users").doc(doc.id).update({fisioId: newValue});
       setOpen(false);
+      window.location.reload();
   });})
   };
   const styles = usePersonStyles();
