@@ -55,8 +55,7 @@ const PersonItem = ({ name, patientId, uid }) => {
   };
 
   const handleClose = (newValue) => {
-    
-
+    debugger
     if (newValue) {
       setValue(newValue);
     }
@@ -66,7 +65,7 @@ const PersonItem = ({ name, patientId, uid }) => {
     .get()
     .then(querySnapshot => {querySnapshot.forEach(function(doc) {
       // console.log(doc.id, " => ", doc.data());
-      db.collection("users").doc(doc.id).update({fisioId: value});
+      db.collection("users").doc(doc.id).update({fisioId: newValue});
       setOpen(false);
   });})
   };
