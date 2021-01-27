@@ -49,7 +49,7 @@ const RegisterExercise = props => {
         db.collection("exercises").add({
             active: true,
             createdAt: now,
-            endDate: new Date(endDate.value + " 00:00:00"),
+            endDate: new Date(endDate.value + " 23:59:59"),
             repetitionsPerSeries: parseInt(repetitionsPerSeries.value),
             seriesDuration: duration.value,
             seriesTimes: hours,
@@ -60,11 +60,11 @@ const RegisterExercise = props => {
             fisioId: currentUser.uid
         })
             .then(function (docRef) {
-                //debugger;
+                debugger;
                 db.collection("exercises").doc(docRef.id).update({ id: docRef.id });
-                let date = new Date(startDate.value);
+                let date = new Date(startDate.value + " 00:00:00");
                 let dates = [];
-                for (date; date <= new Date(endDate.value); date.setDate(date.getDate() + 1)) {
+                for (date; date <= new Date(endDate.value + " 23:59:59"); date.setDate(date.getDate() + 1)) {
                     hours.map(hour => dates.push(new Date(date.setHours(parseInt(hour.replace(":00", ""))))));
                 }
                 dates.map(date => {
