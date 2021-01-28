@@ -60,7 +60,6 @@ const RegisterExercise = props => {
             fisioId: currentUser.uid
         })
             .then(function (docRef) {
-                debugger;
                 db.collection("exercises").doc(docRef.id).update({ id: docRef.id });
                 let date = new Date(startDate.value + " 00:00:00");
                 let dates = [];
