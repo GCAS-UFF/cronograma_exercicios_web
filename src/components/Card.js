@@ -28,7 +28,7 @@ const Card = props => {
                 });
         };
         fetchData();
-    }, [props.user, currentUser.uid]);
+    }, [props.user]);
 
     useMemo(() => {
         //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
@@ -85,7 +85,7 @@ const Card = props => {
                                         </div>
                                     </div>
                                     <div class="activity">
-                                        <div>{'Tamanho do exercise.activities '+exercise.activities.length}</div>
+                                        {/* <div>{'Tamanho do exercise.activities '+exercise.activities.length}</div> */}
                                         <table>
                                             <tr>
                                                 <th>Status</th>
