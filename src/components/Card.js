@@ -44,8 +44,8 @@ const Card = props => {
                     exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
                     console.log('exercise.activities: ', exercise.activities)
                 })
-                .catch(err => {
-                    console.log("ERRO:", err);
+                .catch(function (error) {
+                    console.log("ERRO: ", error);
                 })
         });
     }, [exercises]);
