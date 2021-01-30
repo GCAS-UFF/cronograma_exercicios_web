@@ -31,6 +31,7 @@ const Card = props => {
     }, [props.user, currentUser.uid]);
 
     useMemo(() => {
+        const total = 0
         //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
         exercises.forEach(exercise => {
             exercise.activities = [];
@@ -42,6 +43,8 @@ const Card = props => {
                 .then(querySnapshot => {
                     setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
                     exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
+                    console.log('exercise.activities: ', exercise.activities)
+                    console.log('chamou: ', total++)
                 })
                 .catch(err => {
                     console.log("ERRO:", err);
