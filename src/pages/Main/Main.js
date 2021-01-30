@@ -42,7 +42,6 @@ const Main = () => {
 
     const handleAutocomplete = (event, user) => {
         if (user != null) {
-            console.log(user.userId)
             setuserSelected(user.userId);
         }
         else {
