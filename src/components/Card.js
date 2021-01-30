@@ -85,6 +85,7 @@ const Card = props => {
                                         </div>
                                     </div>
                                     <div class="activity">
+                                        <div>{'Tamanho do exercise.activities '+exercise.activities.length}</div>
                                         <table>
                                             <tr>
                                                 <th>Status</th>
