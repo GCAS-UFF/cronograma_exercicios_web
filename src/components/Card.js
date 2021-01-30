@@ -31,7 +31,7 @@ const Card = props => {
     }, [props.user, currentUser.uid]);
 
     useMemo(() => {
-        const total = 0
+        let total = 0
         //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
         exercises.forEach(exercise => {
             exercise.activities = [];
