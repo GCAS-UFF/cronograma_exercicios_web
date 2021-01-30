@@ -27,13 +27,14 @@ const Card = props => {
                     setExercises(querySnapshot.docs.map(doc => ({ ...doc.data() })));
                 });
         };
-        fetchData();
+        if (props.user) 
+            fetchData();
     }, [props.user]);
 
     useMemo(() => {
         //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
         exercises.forEach(exercise => {
-            exercise.activities = [];
+            //exercise.activities = [];
             //exercise.user = {};
             const db = fire.firestore();
             db.collection("activities").where("exerciseId", "==", exercise.id)
@@ -41,8 +42,12 @@ const Card = props => {
                 .get()
                 .then(querySnapshot => {
                     setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
-                    exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));
-                    console.log('exercise.activities: ', exercise.activities)
+                    setExercises(
+                        exercises.map( item => item == exercise ? {...item, activities:  querySnapshot.docs.map(d => ({ ...d.data() }))}
+                        : item)
+                    )
+                    //exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));                
+                    //console.log('exercise.activities: ', exercise.activities)
                 })
                 .catch(function (error) {
                     console.log("ERRO: ", error);
@@ -93,7 +98,8 @@ const Card = props => {
                                                 <th>Prescrita para</th>
                                                 <th>Registrada em</th>
                                             </tr>
-                                            {exercise.activities.map(activity => (
+                                            { exercise.activities ?
+                                            (exercise.activities.map(activity => (
                                                 <tr>
                                                     <td>{activity.status}</td>
                                                     <td>{activity.time}</td>
@@ -109,7 +115,8 @@ const Card = props => {
                                                     }</td>
                                                 </tr>
 
-                                            ))}
+                                            ))
+                                            ) : null}
                                         </table>
                                     </div>
                                 </div>
