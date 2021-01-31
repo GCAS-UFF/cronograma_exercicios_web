@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 import fire from '../services/fire';
 import { AuthContext } from "../services/auth";
+import api from '../services/api';
 
 
 const Card = props => {
     const { currentUser } = useContext(AuthContext);
     const [exercises, setExercises] = useState([]);
-    const [activities, setActivities] = useState([]);
     const [user, setUser] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
@@ -21,49 +21,20 @@ const Card = props => {
                     querySnapshot => {
                         setUser(querySnapshot.docs.map(doc => ({ ...doc.data() })));
                     });
-            db.collection("exercises").where("fisioId", "==", currentUser.uid)
-                .get()
-                .then(querySnapshot => {
-                    setExercises(querySnapshot.docs.map(doc => ({ ...doc.data() })));
-                });
-        };
-        if (props.user) 
-            fetchData();
+            let responseExercise = [];
+            responseExercise = await api.get('/exercises?id=' + currentUser.uid);
+            let arrayEx = []
+            responseExercise.data.map(async exercise => {
+                let responseActity = []
+                responseActity = await api.get('/activities?id=' + exercise.id);
+                const ex = { ...exercise, activities: responseActity.data || [] }
+                if (arrayEx.indexOf(ex) === -1)
+                    arrayEx.push(ex)
+                setExercises([...arrayEx])
+            })
+        }
+        props.user ? fetchData() : setExercises([]); setUser([])
     }, [props.user]);
-
-    useMemo(() => {
-        //exercises.reduce((ex, user) => {ex[user.userId] = [...ex[user.userId] || [], user]; return ex;}, {});
-        exercises.forEach(exercise => {
-            //exercise.activities = [];
-            //exercise.user = {};
-            const db = fire.firestore();
-            db.collection("activities").where("exerciseId", "==", exercise.id)
-                .orderBy("prescribedTo", "asc")
-                .get()
-                .then(querySnapshot => {
-                    setActivities(querySnapshot.docs.map(d => ({ ...d.data() })));
-                    setExercises(
-                        exercises.map( item => item == exercise ? {...item, activities:  querySnapshot.docs.map(d => ({ ...d.data() }))}
-                        : item)
-                    )
-                    //exercise.activities = querySnapshot.docs.map(d => ({ ...d.data() }));                
-                    //console.log('exercise.activities: ', exercise.activities)
-                })
-                .catch(function (error) {
-                    console.log("ERRO: ", error);
-                })
-        });
-    }, [exercises]);
-
-    // const addExercise = (userId) => {
-    //     debugger;
-    //     return 
-    //     // <Link to="/registerExercise"/>
-    //     <Redirect to={{
-    //         pathname: "/registerExercise",
-    //         state: { userId: userId }
-    //     }} />
-    // }
 
     return (
         <div>
@@ -77,6 +48,7 @@ const Card = props => {
                     </div>
                     {exercises
                         .filter(exercise => exercise.userId === us.userId)
+                        .filter((este, i) => exercises.indexOf(este) === i)
                         .map((exercise) => (
                             <div>
                                 <div class="activityArea">
@@ -84,39 +56,43 @@ const Card = props => {
                                         <div class="titleActivityArea">
                                             <p class="titleActivity">{exercise.title}</p>
                                             <p class="durationActivity">
-                                                Início: {new Date(exercise.startDate.seconds * 1000).toLocaleDateString("pt-BR") + " " + new Date(exercise.startDate.seconds * 1000).toTimeString().slice(0, 5)
-                                                } Fim: {new Date(exercise.endDate.seconds * 1000).toLocaleDateString("pt-BR") + " " + new Date(exercise.endDate.seconds * 1000).toTimeString().slice(0, 5)
+                                                Início: {new Date(exercise.startDate._seconds * 1000).toLocaleDateString("pt-BR") + " " + new Date(exercise.startDate._seconds * 1000).toTimeString().slice(0, 5)
+                                                } Fim: {new Date(exercise.endDate._seconds * 1000).toLocaleDateString("pt-BR") + " " + new Date(exercise.endDate._seconds * 1000).toTimeString().slice(0, 5)
                                                 }</p>
                                         </div>
                                     </div>
                                     <div class="activity">
                                         {/* <div>{'Tamanho do exercise.activities '+exercise.activities.length}</div> */}
                                         <table>
-                                            <tr>
-                                                <th>Status</th>
-                                                <th>Horário</th>
-                                                <th>Prescrita para</th>
-                                                <th>Registrada em</th>
-                                            </tr>
-                                            { exercise.activities ?
-                                            (exercise.activities.map(activity => (
+                                            <thead>
                                                 <tr>
-                                                    <td>{activity.status}</td>
-                                                    <td>{activity.time}</td>
-                                                    <td>{
-                                                        new Date(activity.prescribedTo.seconds * 1000).toLocaleDateString("pt-BR")
-                                                        //+ " " + new Date(activity.updatedAt.seconds * 1000).toTimeString().slice(0, 5)
-                                                    }
-                                                    </td>
-                                                    <td>{
-                                                        (activity.statusChangedAt != null) ?
-                                                        new Date(activity.statusChangedAt.seconds * 1000).toLocaleString("pt-BR") :
-                                                        "---"
-                                                    }</td>
+                                                    <th>Status</th>
+                                                    <th>Horário</th>
+                                                    <th>Prescrita para</th>
+                                                    <th>Registrada em</th>
                                                 </tr>
+                                            </thead>
+                                            <tbody>
+                                                {exercise.activities ?
+                                                    (exercise.activities.map(activity => (
+                                                        <tr>
+                                                            <td>{activity.status}</td>
+                                                            <td>{activity.time}</td>
+                                                            <td>{
+                                                                new Date(activity.prescribedTo._seconds * 1000).toLocaleDateString("pt-BR")
+                                                                //+ " " + new Date(activity.updatedAt.seconds * 1000).toTimeString().slice(0, 5)
+                                                            }
+                                                            </td>
+                                                            <td>{
+                                                                (activity.statusChangedAt != null) ?
+                                                                    new Date(activity.statusChangedAt._seconds * 1000).toLocaleString("pt-BR") :
+                                                                    "---"
+                                                            }</td>
+                                                        </tr>
 
-                                            ))
-                                            ) : null}
+                                                    ))
+                                                    ) : null}
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -124,6 +100,7 @@ const Card = props => {
 
                         )
                         )
+
                     }
                 </div >
             )}

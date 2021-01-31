@@ -46,7 +46,7 @@ const SignUp = ({ history }) => {
         }, [history]);
     const { currentUser } = useContext(AuthContext);
     if (currentUser) {
-        debugger;
+        //debugger;
         let user = fire.auth().currentUser;
         user.updateProfile({
             displayName: document.querySelector('input').value

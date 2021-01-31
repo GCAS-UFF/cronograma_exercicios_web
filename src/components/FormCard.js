@@ -16,7 +16,7 @@ const FormCard = ({ history, display }) => {
                 fisioId: currentUser.uid
             };
             const response = await api.post('/users', data);
-            console.log(response);
+            //console.log(response);
             history.push("/");
         } catch (error) {
             alert(error);

@@ -6,7 +6,7 @@ import fire from '../services/fire';
 import { AuthContext } from "../services/auth";
 
 const SignOut = () => {
-    debugger;
+   // debugger;
     const { currentUser } = useContext(AuthContext);
     const out = () => {
         fire.auth().signOut()
