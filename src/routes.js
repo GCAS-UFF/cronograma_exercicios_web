@@ -8,6 +8,7 @@ import PassowrdReset from './pages/PasswordReset/PasswordReset';
 import Main from './pages/Main/Main'
 import Manage from './pages/Manage/Manage'
 import RegisterExercise from './pages/RegisterExercise/RegisterExercise';
+import Register from './pages/Register/Register';
 import { AuthContext, AuthProvider } from "./services/auth";
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
@@ -33,6 +34,7 @@ const Routes = () => (
       <Route exact path="/" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/signIn" component={SignIn} />
+      <Route path="/register" component={Register} />
       <Route path="/passwordReset" component={PassowrdReset} />
       <PrivateRoute exact path="/main" component={Main} />
       <PrivateRoute exact path="/registerExercise/:userId" component={RegisterExercise} />
