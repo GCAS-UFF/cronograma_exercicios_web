@@ -12,6 +12,8 @@ const Card = props => {
     const { currentUser } = useContext(AuthContext);
     const [exercises, setExercises] = useState([]);
     const [user, setUser] = useState([]);
+    const [responseExercise, setResponseExercise] = useState([]);
+    const [render, setRender] = useState(false)
     useEffect(() => {
         const fetchData = async () => {
             const db = fire.firestore();
@@ -21,24 +23,56 @@ const Card = props => {
                     querySnapshot => {
                         setUser(querySnapshot.docs.map(doc => ({ ...doc.data() })));
                     });
-            let responseExercise = [];
-            responseExercise = await api.get('/exercises?id=' + currentUser.uid);
-            let arrayEx = []
-            responseExercise.data.map(async exercise => {
-                let responseActity = []
-                responseActity = await api.get('/activities?id=' + exercise.id);
-                const ex = { ...exercise, activities: responseActity.data || [] }
-                if (arrayEx.indexOf(ex) === -1)
-                    arrayEx.push(ex)
-                setExercises([...arrayEx])
-            })
         }
-        props.user ? fetchData() : setExercises([]); setUser([])
+        props.user ? fetchData() : setUser([]);
     }, [props.user]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await api.get('/exercises?id=' + currentUser.uid)
+            setResponseExercise(response.data)
+        }
+        if (props.user)
+            fetchData()
+        else {
+            setResponseExercise([])
+            setExercises([])
+        }
+    }, [currentUser, props.user])
+
+    useEffect(() => {
+        const data = async () => {
+            if (responseExercise.length > 0) {
+                let arrayEx = []
+                await Promise.all(responseExercise.map(async exercise => {
+                    let responseActity = []
+                    responseActity = await api.get('/activities?id=' + exercise.id);
+                    const ex = { ...exercise, activities: responseActity.data || [] }
+                    if (arrayEx.indexOf(ex) === -1)
+                        arrayEx.push(ex)
+                }))
+                setExercises([...arrayEx])
+            }
+        }
+        if (props.user)
+            data()
+        else {
+            setExercises([])
+        }
+    }, [responseExercise, props.user])
+
+    useEffect(() => {
+        if (exercises.length > 0)
+        setRender(true)
+        // console.log('exercises: ', exercises)
+        // console.log('render: ', render)        
+    }, [exercises])
+
 
     return (
         <div>
-            {user.map(us =>
+            {render ? 
+            (user.map(us =>
                 < div class="card" >
                     <div class="titleArea">
                         <p class="title">{us.name}</p>
@@ -48,7 +82,7 @@ const Card = props => {
                     </div>
                     {exercises
                         .filter(exercise => exercise.userId === us.userId)
-                        .filter((este, i) => exercises.indexOf(este) === i)
+                        //.filter((este, i) => exercises.indexOf(este) === i)
                         .map((exercise) => (
                             <div>
                                 <div class="activityArea">
@@ -103,7 +137,7 @@ const Card = props => {
 
                     }
                 </div >
-            )}
+            )) : null}
         </div>
 
     );
