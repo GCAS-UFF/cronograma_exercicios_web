@@ -47,12 +47,52 @@
     margin: 0;
 }
 
+.activityArea {
+    margin-bottom: 40px;
+}
+
 .titleActivityArea {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
 }
+
+.titleActivityArea p {
+    margin-right: 10px;
+}
+
+.btnDelete {
+    height: 20px;
+    width: fit-content;
+    background: #bb0000;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.btnDelete:disabled {
+    cursor: not-allowed;
+    background: #db8f8f;
+}
+
+.activeStatus {
+    margin: 0 0 2px 0;
+    font-size: 70%;
+    height: 14px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.activeStatus.inactive {
+    background: #cc0000;
+    color: #fff;
+}
+
+.activeStatus.active {
+    background: #169bd5;
+    color: #fff;
+}
+
 .activity {
     display: flex;
     overflow-y: scroll;
