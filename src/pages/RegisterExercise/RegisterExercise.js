@@ -57,7 +57,8 @@ const RegisterExercise = props => {
             title: title.value,
             updatedAt: now,
             userId: userId,
-            fisioId: currentUser.uid
+            fisioId: currentUser.uid,
+            currentlyUsed: false,
         })
             .then(function (docRef) {
                 db.collection("exercises").doc(docRef.id).update({ id: docRef.id });
