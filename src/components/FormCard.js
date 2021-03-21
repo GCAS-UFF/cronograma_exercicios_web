@@ -1,12 +1,32 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import './FormCard.css';
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../services/auth";
 import api from '../services/api';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+
+import Button from './Button'
 
 const FormCard = ({ history, display }) => {
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [type, setType] = useState('');
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+        setMsg('');
+      };
+
     const handleAddPatient = useCallback(async event => {
         event.preventDefault();
+        setLoading(true);
         const { name, email, password } = event.target.elements;
         try {
             let data = {
@@ -17,9 +37,16 @@ const FormCard = ({ history, display }) => {
             };
             const response = await api.post('/users', data);
             //console.log(response);
+            setMsg('Paciente cadastrado com sucesso');
+            setType("success")
+            setOpen(true);
+            setLoading(false);
             history.push("/");
         } catch (error) {
-            alert(error);
+            setOpen(true);
+            setType("error");
+            setLoading(false);
+            setMsg('Ocorreu um erro ao cadastrar o paciente. Por favor, tente novamente mais tarde.');
         }
     }, [history])
 
@@ -42,7 +69,13 @@ const FormCard = ({ history, display }) => {
                     name="password"
                     placeholder="Senha"
                 />
-                <button type="submit">Cadastrar</button>
+                <Button loading={loading} disabled={disabled} value="Cadastrar"/>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity={type}>
+                            {msg}
+                        </Alert>
+                </Snackbar>
+                {/* <button type="submit">Cadastrar</button> */}
             </form>
         </div>
     )
