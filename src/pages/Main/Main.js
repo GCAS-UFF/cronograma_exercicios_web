@@ -3,6 +3,8 @@ import { withRouter } from "react-router-dom";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import './Main.css';
 // import Header from '../../components/Header';
@@ -17,6 +19,13 @@ const Main = () => {
     const [userWithoutFisio, setUserWithoutFisio] = useState([]);
     const { currentUser } = useContext(AuthContext);
     const [userSelected, setuserSelected] = useState(null);
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+      setOpen(false);
+    };
+    const handleToggle = () => {
+      setOpen(!open);
+    };
     const handleAddUser = () => {
         setDisplayForm(true);
     }
@@ -70,7 +79,10 @@ const Main = () => {
 
                     </div>
                 </div>
-            <Card user={userSelected} />
+            <Card user={userSelected} onClose={handleClose} openLoading={handleToggle}/>
+            <Backdrop open={open} onClick={handleClose} style={{zIndex: 1}}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     )
 };

@@ -22,6 +22,7 @@ const Card = props => {
     useEffect(() => {
         const fetchData = async () => {
             const db = fire.firestore();
+            props.openLoading()
             db.collection("users").where("userId", "==", props.user)
                 .get()
                 .then(
@@ -69,6 +70,7 @@ const Card = props => {
     useEffect(() => {
         if (exercises.length > 0)
         setRender(true)
+        props.onClose()
         // console.log('exercises: ', exercises)
         // console.log('render: ', render)        
     }, [exercises])
