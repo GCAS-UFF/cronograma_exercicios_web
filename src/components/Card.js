@@ -109,7 +109,7 @@ const Card = props => {
                                             <tbody>
                                                 {exercise.activities ?
                                                     (exercise.activities.map(activity => (
-                                                        <tr>
+                                                        <tr style={activity.status === "Não realizada" ? {backgroundColor: "#ffdfd4"} : {backgroundColor: "inherit"}}>
                                                             <td>{activity.status}</td>
                                                             <td>{activity.time}</td>
                                                             <td>{
