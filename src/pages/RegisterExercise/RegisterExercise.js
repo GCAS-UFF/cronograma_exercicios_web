@@ -141,14 +141,12 @@ const RegisterExercise = props => {
                     <input
                         type="time"
                         name="duration"
-                        placeholder="Duração"
-                        required
+                        placeholder="Duração"                        
                     />
                     <input
                         type="number"
                         name="repetitionsPerSeries"
-                        placeholder="Repetições por série"
-                        required
+                        placeholder="Repetições por série"                        
                     />
                     <div class="hours">
                         <div class="containerHours">
