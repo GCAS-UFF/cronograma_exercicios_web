@@ -27,6 +27,7 @@ const Card = props => {
                 .get()
                 .then(
                     querySnapshot => {
+                        props.onClose();
                         setUser(querySnapshot.docs.map(doc => ({ ...doc.data() })));
                     });
         }
@@ -106,7 +107,7 @@ const Card = props => {
 
     return (
         <div>
-            {render ? 
+            {
             (user.map(us =>
                 < div class="card" >
                     <div class="titleArea">
@@ -189,7 +190,7 @@ const Card = props => {
 
                 </div >
 
-            )) : null}
+            )) }
             <SimpleConfirmationDialog 
                 open={dialogOpen}
                 title="Desativar exercício"
