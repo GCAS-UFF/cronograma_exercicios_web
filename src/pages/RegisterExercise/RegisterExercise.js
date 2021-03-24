@@ -50,7 +50,7 @@ const RegisterExercise = props => {
             active: true,
             createdAt: now,
             endDate: new Date(endDate.value + " 23:59:59"),
-            repetitionsPerSeries: parseInt(repetitionsPerSeries.value),
+            repetitionsPerSeries: parseInt(repetitionsPerSeries.value || 0),
             seriesDuration: duration.value,
             seriesTimes: hours,
             startDate: new Date(startDate.value + " 00:00:00"),
