@@ -54,6 +54,13 @@ const PersonItem = ({ name, patientId, uid }) => {
     setOpen(true);
   };
 
+  /**
+   * Função atrelada ao botão de cancel do componente ConfirmationDialogRaw para fechá-lo.
+   */
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
   const handleClose = (newValue) => {    
     if (newValue) {
       setValue(newValue);
@@ -106,6 +113,7 @@ const PersonItem = ({ name, patientId, uid }) => {
               keepMounted
               open={open}
               onClose={handleClose}
+              onCancel={handleCancel}
               value={value}
               name={name}
               uid={uid} 

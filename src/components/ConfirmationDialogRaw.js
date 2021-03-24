@@ -16,7 +16,7 @@ import {
 import api from '../services/api';
 
 const ConfirmationDialogRaw = (props) => {
-  const { onClose, value: valueProp, open, name, uid, patientId, ...other } = props;
+  const { onClose, onCancel, value: valueProp, open, name, uid, patientId, ...other } = props;
   const [value, setValue] = React.useState(valueProp);
   const [fisios, setFisios] = React.useState([]);
 
@@ -32,7 +32,7 @@ const ConfirmationDialogRaw = (props) => {
   }, [valueProp, open])
 
   const handleCancel = () => {
-    onClose();
+    onCancel();
   };
 
   const handleOk = () => {
