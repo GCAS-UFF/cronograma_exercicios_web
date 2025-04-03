@@ -15,6 +15,10 @@ const FormCard = ({ history, display }) => {
     const [msg, setMsg] = useState('');
     const [type, setType] = useState('');
 
+    const messages = {
+        'auth/email-already-exists': 'O endereço de e-mail já foi usado.',
+    };
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
@@ -36,7 +40,7 @@ const FormCard = ({ history, display }) => {
                 fisioId: currentUser.uid
             };
             const response = await api.post('/users', data);
-            //console.log(response);
+            // console.log(response);
             setMsg('Paciente cadastrado com sucesso');
             setType("success")
             setOpen(true);
@@ -46,14 +50,15 @@ const FormCard = ({ history, display }) => {
             setOpen(true);
             setType("error");
             setLoading(false);
-            setMsg('Ocorreu um erro ao cadastrar o paciente. Por favor, tente novamente mais tarde.');
+            const defaultMessage = 'Ocorreu um erro ao cadastrar o paciente. Por favor, tente novamente mais tarde.';
+            setMsg(error.response.data.message || defaultMessage);
         }
     }, [history])
 
     const { currentUser } = useContext(AuthContext);
     return (
-        <div class="containerW">
-            <form onSubmit={handleAddPatient} class="loginContainerW">
+        <div className="containerW">
+            <form onSubmit={handleAddPatient} className="loginContainerW">
                 <input
                     type="text"
                     name="name"
