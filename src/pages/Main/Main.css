@@ -3,14 +3,14 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 5%;
+    margin-bottom: 10px;
 }
 
 .containerTopWidgets {
     display: flex;
     width: 60%;
     flex-direction: row;
-    padding: 2%;
+    padding: 10px 2% 0 0;
     justify-content: flex-end;
 }
 .containerTopWidgets button {
@@ -32,4 +32,8 @@
 }
 .MuiTouchRipple-root{
     margin-bottom: 2em;
+}
+.MuiAutocomplete-endAdornment {
+    top: 0 !important;
+    right: 0 !important;
 }

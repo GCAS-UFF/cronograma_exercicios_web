@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 3%;
+    margin: 10px 3% 0;
     padding: 0 1% 0;
     background-color: #ffffff;
     border-radius: 10px;
@@ -15,6 +15,11 @@
     color: #169BD5;
     font-weight: 500;
     font-size: 130%;
+}
+
+.buttonCopy {
+    height: 20px;
+    margin: 0;
 }
 
 .buttonAdd {
@@ -123,7 +128,7 @@ table {
     text-align: center;
     vertical-align: middle;
     border-collapse: collapse;
-    width: 70%;
+    width: 100%;
 }
 table, th, td {
     border: 1px solid #ffffff;

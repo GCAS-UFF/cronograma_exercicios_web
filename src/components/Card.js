@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState, useMemo } from 'react';
 import './Card.css';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Delete from '@material-ui/icons/Delete';
+import FileCopy from "@material-ui/icons/FileCopy";
 import { Link } from "react-router-dom";
 
 import fire from '../services/fire';
@@ -105,6 +106,26 @@ const Card = props => {
 
     };
 
+    const copyToClipboard = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+        }
+        catch (err) {
+
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case "Realizada":
+                return "#cec";
+            case "Não realizada":
+                return "#ecc";
+            default:
+                return "inherit"
+        }
+    }
+
     return (
         <div>
             {
@@ -151,17 +172,31 @@ const Card = props => {
                                         <table>
                                             <thead>
                                                 <tr>
+                                                    <th>ID</th>
                                                     <th>Status</th>
                                                     <th>Horário</th>
                                                     <th>Prescrita para</th>
                                                     <th>Registrada em</th>
+                                                    <th>Escala Fadiga</th>
+                                                    <th>Escala Dispneia</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {exercise.activities ?
                                                     (exercise.activities.map(activity => (
-                                                        <tr style={activity.status === "Não realizada" ? {backgroundColor: "#ffdfd4"} : {backgroundColor: "inherit"}}>
-                                                            <td>{activity.status}</td>
+                                                        <tr>
+                                                            <td>
+                                                                <button 
+                                                                    className="buttonCopy"
+                                                                    title={`Copiar ID da atividade ${activity.id}`} 
+                                                                    onClick={copyToClipboard(activity.id)}>
+                                                                    <FileCopy style={{ fontSize: 14 }} />
+                                                                </button>
+                                                            </td>
+                                                            <td 
+                                                                style={{ backgroundColor: getStatusColor(activity.status) }}>
+                                                                {activity.status}
+                                                            </td>
                                                             <td>{activity.time}</td>
                                                             <td>{
                                                                 new Date(activity.prescribedTo._seconds * 1000).toLocaleDateString("pt-BR")
@@ -171,6 +206,20 @@ const Card = props => {
                                                             <td>{
                                                                 (activity.statusChangedAt != null) ?
                                                                     new Date(activity.statusChangedAt._seconds * 1000).toLocaleString("pt-BR") :
+                                                                    "---"
+                                                            }</td>
+                                                            <td>{
+                                                                (activity.fatigueScore) ? 
+                                                                    <abbr title={activity.fatigueScore}>
+                                                                        { activity.fatigueScore.split("-")[0] }
+                                                                    </abbr> :
+                                                                    "---"
+                                                            }</td>
+                                                            <td>{
+                                                                (activity.dyspneaScore) ?
+                                                                    <abbr title={activity.dyspneaScore}>
+                                                                        { activity.dyspneaScore.split("-")[0] }
+                                                                    </abbr> :
                                                                     "---"
                                                             }</td>
                                                         </tr>

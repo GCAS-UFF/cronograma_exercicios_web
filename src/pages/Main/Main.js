@@ -65,9 +65,11 @@ const Main = () => {
             {displayForm ? <FormCard /> : null}
                 <div className="containerTop">
                     <div className="containerTopWidgets">
-                        <button onClick={handleAddUser}>
-                            <AddCircleIcon style={{ verticalAlign: 'middle' }} /> Adicionar Paciente
-                    </button>
+                        <button
+                            onClick={handleAddUser}>
+                            <AddCircleIcon style={{ verticalAlign: 'middle' }} /> 
+                            Adicionar Paciente
+                        </button>
                         <Autocomplete
                             id="combo-box-demo"
                             options={userWithoutFisio.filter(option =>
